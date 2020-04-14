@@ -94,7 +94,7 @@ class App extends React.Component {
   }
   update = () => {
     this.add2signals(last(this.state.bits)*this.state.pulse[this.state.count])
-    if (this.state.count == 9) {
+    if (this.state.count >= this.state.pulse.length-1) {
       this.add2bits(Math.random() >= 0.5)
       this.setState({count: 0})
     } else {
@@ -103,6 +103,10 @@ class App extends React.Component {
   }
   handle_SNR = (event, value) => {
     this.noise_std = pow(10, -value/20)
+  }
+  handle_SXB = (event, value) => {
+    console.log(value);
+    this.setState({pulse: new Array(value).fill(1), filter: new Array(value).fill(1/value)})
   }
   componentDidMount() {
     this.interval = setInterval(() => this.update(), 50);
@@ -317,6 +321,22 @@ class App extends React.Component {
                       min={-10}
                       max={20}
                       step={0.01}
+                    />
+                  </Col>
+                  <Col md="6">
+                    <FormLabel component="legend">
+                      Symbols per bit
+                    </FormLabel>
+                    <Slider
+                      value={this.state.pulse.length}
+                      onChange={this.handle_SXB}
+                      aria-labelledby="discrete-slider"
+                      valueLabelDisplay="auto"
+                      getAriaValueText={valueLabelFormat}
+                      valueLabelFormat={valueLabelFormat}
+                      min={1}
+                      max={30}
+                      step={1}
                     />
                   </Col>
                 </Row>
