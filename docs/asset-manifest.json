@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/bpsk-awgn-lab/static/css/main.71431207.chunk.css",
+    "main.js": "/bpsk-awgn-lab/static/js/main.1a6fa0cf.chunk.js",
+    "main.js.map": "/bpsk-awgn-lab/static/js/main.1a6fa0cf.chunk.js.map",
+    "runtime-main.js": "/bpsk-awgn-lab/static/js/runtime-main.c854f2bb.js",
+    "runtime-main.js.map": "/bpsk-awgn-lab/static/js/runtime-main.c854f2bb.js.map",
+    "static/css/2.0036c199.chunk.css": "/bpsk-awgn-lab/static/css/2.0036c199.chunk.css",
+    "static/js/2.da070c0a.chunk.js": "/bpsk-awgn-lab/static/js/2.da070c0a.chunk.js",
+    "static/js/2.da070c0a.chunk.js.map": "/bpsk-awgn-lab/static/js/2.da070c0a.chunk.js.map",
+    "index.html": "/bpsk-awgn-lab/index.html",
+    "precache-manifest.430062a5afa960d9c8b185290249e10d.js": "/bpsk-awgn-lab/precache-manifest.430062a5afa960d9c8b185290249e10d.js",
+    "service-worker.js": "/bpsk-awgn-lab/service-worker.js",
+    "static/css/2.0036c199.chunk.css.map": "/bpsk-awgn-lab/static/css/2.0036c199.chunk.css.map",
+    "static/css/main.71431207.chunk.css.map": "/bpsk-awgn-lab/static/css/main.71431207.chunk.css.map",
+    "static/js/2.da070c0a.chunk.js.LICENSE.txt": "/bpsk-awgn-lab/static/js/2.da070c0a.chunk.js.LICENSE.txt",
+    "static/media/katex.min.css": "/bpsk-awgn-lab/static/media/KaTeX_Typewriter-Regular.f43e8696.woff2",
+    "static/media/logo.svg": "/bpsk-awgn-lab/static/media/logo.5d5d9eef.svg",
+    "static/media/nucleo-icons.css": "/bpsk-awgn-lab/static/media/nucleo.f0b489a5.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c854f2bb.js",
+    "static/css/2.0036c199.chunk.css",
+    "static/js/2.da070c0a.chunk.js",
+    "static/css/main.71431207.chunk.css",
+    "static/js/main.1a6fa0cf.chunk.js"
+  ]
+}
