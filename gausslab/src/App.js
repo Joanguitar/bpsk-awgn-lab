@@ -76,6 +76,8 @@ class App extends React.Component {
     }
     this.noise_symbol = 90;
     this.noise_std = 0.5;
+    this.snr = 20*log10(1/this.noise_std)
+    this.handicap = (this.state.filter.length-(180%this.state.filter.length))%this.state.filter.length
   }
   add2signals = (value) => {
     var signal = this.state.signal
@@ -109,10 +111,12 @@ class App extends React.Component {
   }
   handle_SNR = (event, value) => {
     this.noise_std = pow(10, -value/20)
+    this.snr = 20*log10(1/this.noise_std)
   }
   handle_SXB = (event, value) => {
     console.log(value);
     this.setState({pulse: new Array(value).fill(1), filter: new Array(value).fill(1/value)})
+    this.handicap = (value-(180%value))%value
   }
   componentDidMount() {
     this.interval = setInterval(() => this.update(), 50);
@@ -121,7 +125,6 @@ class App extends React.Component {
     clearInterval(this.interval);
   }
   render() {
-    const snr = 20*log10(1/this.noise_std)
     return (
       <div className="App">
         <Row>
@@ -257,7 +260,7 @@ class App extends React.Component {
                         borderDash: [],
                         borderDashOffset: 0.0,
                         pointRadius: 5,//4,
-                        data: slice(this.state.signal_filtered)['-'+(this.state.count+1)+':0:-'+this.state.filter.length].map((simbol, ii) => {return({x: ii*this.state.filter.length+this.state.count, y: simbol})}),
+                        data: slice(this.state.signal_filtered)['-'+(this.state.count+1+this.handicap)+':0:-'+this.state.filter.length].map((simbol, ii) => {return({x: ii*this.state.filter.length+this.state.count+this.handicap, y: simbol})}),
                       },
                       {
                         label: "signal",
@@ -331,7 +334,7 @@ class App extends React.Component {
                       SNR (dB)
                     </FormLabel>
                     <Slider
-                      value={snr}
+                      value={this.snr}
                       onChange={this.handle_SNR}
                       aria-labelledby="continuous-slider"
                       valueLabelDisplay="auto"
@@ -360,6 +363,19 @@ class App extends React.Component {
                   </Col>
                 </Row>
               </CardFooter>
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col lg="1">
+          </Col>
+          <Col lg="10">
+            <Card>
+              <CardBody>
+                <Table>
+
+                </Table>
+              </CardBody>
             </Card>
           </Col>
         </Row>
