@@ -6,6 +6,8 @@ import logo from './logo.svg';
 import './App.css';
 import FormLabel from '@material-ui/core/FormLabel';
 import Slider from '@material-ui/core/Slider';
+import 'katex/dist/katex.min.css';
+import { InlineMath, BlockMath } from 'react-katex';
 
 import {
   Button,
@@ -440,6 +442,94 @@ class App extends React.Component {
                     </tr>
                   </tbody>
                 </Table>
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>
+                  <h1>
+                    BPSK Communication with AWGN and simbol redundancy
+                  </h1>
+                </CardTitle>
+              </CardHeader>
+              <CardBody>
+                <p>
+                  The figures above depict a digital communication example.
+                  This one consists on a transmitter, a channel and a receiver.
+                </p>
+                <Row>
+                  <Col md="4">
+                    <h3>The transmitter</h3>
+                    <p align='left'>
+                      The transmitter consiste on a BPSK modulator with redundancy.
+                      This means that maps each bit into the BPSK constellation [-1, 1], in this case -1 for 0 and 1 for 1.
+                      Then it replicates the symbols for as many samples as specified.
+                      The samples per bit can be modified with the slider.
+                      (The transmission power is considered as 1 for simplicity).
+                    </p>
+                    <p>
+                      The transmitted signal is represented with blue in the left graph.
+                    </p>
+                  </Col>
+                  <Col md="4">
+                    <h3>The channel</h3>
+                    <p align='left'>
+                      The channel is modeled as an additive white Gaussian noise channel (AWGN).
+                      This means that for each sample in the signal it adds a noise component distributed as an independent Gaussian variable.
+                      <InlineMath math="n[t]\sim\mathcal{N}(0, \sigma^2)" />
+                      <BlockMath math="y_r[t] = y_t[t] + n[t]"/>
+                    </p>
+                    <p>
+                      The effect of the channel over the transmitted signal is represented with red in the left graph.
+                    </p>
+                  </Col>
+                  <Col md="4">
+                    <h3>The receiver</h3>
+                    <p align='left'>
+                      The receiver uses a uniform matched filter with downsampling to process the signal and then decodes the BPSK modulation.
+                      It starts by filtering the signal using a moving average of length equal to the number of samples per bit.
+                      Then it performs a downsampling by selecting a sample for each samples block of length equal to the number of samples per bit.
+                      This allows the receiver to eliminate the redundancy per bit while clearing the BPSK constellation symbol.
+                      All is left to do is to decode the BPSK constellation.
+                      The receiver does this by mapping all values greater than 0 to 1 and the remaining ones to 0.
+                    </p>
+                    <p>
+                      The samples that the filter is applied to are highlighted with yellow in the left graph.
+                    </p>
+                    <p>
+                      The result of the filter is depicted with green in the right plot, while the downsampling is depicted as red dots.
+                    </p>
+                  </Col>
+                </Row>
+                <h2>The plots</h2>
+                <Row>
+                  <Col md="6">
+                    <h3>Left plot</h3>
+                    <p align="left">
+                      The left plot represents the communication channel.
+                      The transmitted signal is represented in blue.
+                      The received signal is represented in red.
+                      The samples being filtered are represented in yellow.
+                    </p>
+                    <p align="left">
+                      The signal leaves the transmitter clean (blue line).
+                      Then it encounters the channel getting the noise and becoming distorted (red line).
+                      Finally, it reaces the receiver and gets prepared to be filtered (yellow).
+                    </p>
+                  </Col>
+                  <Col md="6">
+                    <h3>Right plot</h3>
+                    <p align="left">
+                      The right plot represents the decoding at the receiver.
+                      The filtered received signal is represented with blue.
+                      The downsampling is represented with red markers.
+                    </p>
+                    <p align="left">
+                      The signal in the receiver gets filtered becoming the green line.
+                      Then it goes through a subsampling, only selecting one out of each number of samples per bit (red markers).
+                    </p>
+                  </Col>
+                </Row>
               </CardBody>
             </Card>
           </Col>
