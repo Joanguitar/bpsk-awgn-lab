@@ -1,6 +1,7 @@
 import React from 'react';
 import { Scatter } from 'react-chartjs-2';
 import { sum, log10, pow } from 'mathjs'
+import slice from 'slice.js';
 import logo from './logo.svg';
 import './App.css';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -69,7 +70,9 @@ class App extends React.Component {
       signal_filtered: new Array(60).fill(0.0),
       pulse: new Array(10).fill(1),
       filter: new Array(10).fill(0.1),
-      count: 0
+      count: 0,
+      true_bits: new Array(20).fill(false),
+      decoded_bits: new Array(20).fill(false),
     }
     this.noise_symbol = 90;
     this.noise_std = 0.5;
@@ -88,8 +91,11 @@ class App extends React.Component {
   }
   add2bits = (value) => {
     var bits = this.state.bits
+    var true_bits = this.state.true_bits
     bits.push(value)
+    true_bits.push(bits[0])
     bits.shift()
+    true_bits.shift()
     this.setState({bits: bits})
   }
   update = () => {
@@ -240,6 +246,19 @@ class App extends React.Component {
                 <Scatter
                   data={{
                     datasets: [
+                      {
+                        label: "signal_sub",
+                        fill: true,
+                        showLine: false,
+                        lineTension: 0.1,
+                        backgroundColor: "rgba(255, 0, 0, 0.1)",
+                        borderColor: "rgba(255, 0, 0, 1)",
+                        borderWidth: 2,
+                        borderDash: [],
+                        borderDashOffset: 0.0,
+                        pointRadius: 5,//4,
+                        data: slice(this.state.signal_filtered)['-'+(this.state.count+1)+':0:-'+this.state.filter.length].map((simbol, ii) => {return({x: ii*this.state.filter.length+this.state.count, y: simbol})}),
+                      },
                       {
                         label: "signal",
                         fill: true,
