@@ -25,6 +25,35 @@ function last(array){
   return(array[array.length-1])
 }
 
+var spareRandom = null;
+function normalRandom()
+{
+	var val, u, v, s, mul;
+
+	if(spareRandom !== null)
+	{
+		val = spareRandom;
+		spareRandom = null;
+	}
+	else
+	{
+		do
+		{
+			u = Math.random()*2-1;
+			v = Math.random()*2-1;
+
+			s = u*u+v*v;
+		} while(s === 0 || s >= 1);
+
+		mul = Math.sqrt(-2 * Math.log(s) / s);
+
+		val = u * mul;
+		spareRandom = v * mul;
+	}
+
+	return val;
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -36,12 +65,15 @@ class App extends React.Component {
       filter: new Array(10).fill(0.1),
       count: 0
     }
+    this.noise_symbol = 90;
+    this.noise_std = 0.5;
   }
   add2signals = (value) => {
     var signal = this.state.signal
     var signal_filtered = this.state.signal_filtered
     signal.push(value ? 1 : -1)
     signal.shift()
+    signal[this.noise_symbol] += this.noise_std*normalRandom()
     signal_filtered.push(
       sum(signal.slice(0, this.state.filter.length).map((value, ii) => value*this.state.filter[ii]))
     )
@@ -73,8 +105,17 @@ class App extends React.Component {
     return (
       <div className="App">
         <Row>
-          <Col lg="8">
+          <Col lg="1">
+          </Col>
+          <Col lg="7">
             <Card>
+              <CardHeader>
+                <CardTitle>
+                  <h3>
+                    Communication
+                  </h3>
+                </CardTitle>
+              </CardHeader>
               <CardBody>
                 <Scatter
                   data={{
@@ -84,13 +125,39 @@ class App extends React.Component {
                         fill: true,
                         showLine: true,
                         lineTension: 0.1,
-                        backgroundColor: "rgba(255, 0, 0, 0.1)",
-                        borderColor: "#f11e1f",
+                        backgroundColor: "rgba(50, 50, 255, 0.1)",
+                        borderColor: "rgba(50, 50, 255, 1)",
                         borderWidth: 2,
                         borderDash: [],
                         borderDashOffset: 0.0,
                         pointRadius: 3,//4,
-                        data: this.state.signal.slice().reverse().map((simbol, ii) => {return({x: ii, y: simbol})}),
+                        data: this.state.signal.slice(-this.noise_symbol).reverse().map((simbol, ii) => {return({x: ii, y: simbol})}),
+                      },
+                      {
+                        label: "signal_w_noise",
+                        fill: true,
+                        showLine: true,
+                        lineTension: 0.1,
+                        backgroundColor: "rgba(255, 0, 0, 0.1)",
+                        borderColor: "rgba(255, 0, 0, 1)",
+                        borderWidth: 2,
+                        borderDash: [],
+                        borderDashOffset: 0.0,
+                        pointRadius: 3,//4,
+                        data: this.state.signal.slice(this.state.filter.length, -this.noise_symbol).reverse().map((simbol, ii) => {return({x: this.noise_symbol+ii, y: simbol})}),
+                      },
+                      {
+                        label: "signal_for filter",
+                        fill: true,
+                        showLine: true,
+                        lineTension: 0.1,
+                        backgroundColor: "rgba(255, 150, 0, 0.1)",
+                        borderColor: "rgba(255, 150, 0, 1)",
+                        borderWidth: 2,
+                        borderDash: [],
+                        borderDashOffset: 0.0,
+                        pointRadius: 3,//4,
+                        data: this.state.signal.slice(0, this.state.filter.length).reverse().map((simbol, ii) => {return({x: this.state.signal.length+ii-this.state.filter.length, y: simbol})}),
                       }
                     ]
                   }}
@@ -146,8 +213,15 @@ class App extends React.Component {
               </CardBody>
             </Card>
           </Col>
-          <Col lg="4">
+          <Col lg="3">
             <Card>
+              <CardHeader>
+                <CardTitle>
+                  <h3>
+                    Filter
+                  </h3>
+                </CardTitle>
+              </CardHeader>
               <CardBody>
                 <Scatter
                   data={{
@@ -157,8 +231,8 @@ class App extends React.Component {
                         fill: true,
                         showLine: true,
                         lineTension: 0.1,
-                        backgroundColor: "rgba(255, 0, 0, 0.1)",
-                        borderColor: "#f11e1f",
+                        backgroundColor: "rgba(0, 255, 0, 0.1)",
+                        borderColor: "rgba(0, 200, 0, 1)",
                         borderWidth: 2,
                         borderDash: [],
                         borderDashOffset: 0.0,
