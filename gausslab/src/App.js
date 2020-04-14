@@ -1,8 +1,10 @@
 import React from 'react';
 import { Scatter } from 'react-chartjs-2';
-import { sum } from 'mathjs'
+import { sum, log10, pow } from 'mathjs'
 import logo from './logo.svg';
 import './App.css';
+import FormLabel from '@material-ui/core/FormLabel';
+import Slider from '@material-ui/core/Slider';
 
 import {
   Button,
@@ -20,6 +22,10 @@ import {
   Row,
   Col
 } from "reactstrap";
+
+function valueLabelFormat(value){
+  return(''+Math.round(10*value)/10)
+}
 
 function last(array){
   return(array[array.length-1])
@@ -95,6 +101,9 @@ class App extends React.Component {
       this.setState({count: this.state.count+1})
     }
   }
+  handle_SNR = (event, value) => {
+    this.noise_std = pow(10, -value/20)
+  }
   componentDidMount() {
     this.interval = setInterval(() => this.update(), 50);
   }
@@ -102,6 +111,7 @@ class App extends React.Component {
     clearInterval(this.interval);
   }
   render() {
+    const snr = 20*log10(1/this.noise_std)
     return (
       <div className="App">
         <Row>
@@ -131,7 +141,7 @@ class App extends React.Component {
                         borderDash: [],
                         borderDashOffset: 0.0,
                         pointRadius: 3,//4,
-                        data: this.state.signal.slice(-this.noise_symbol).reverse().map((simbol, ii) => {return({x: ii, y: simbol})}),
+                        data: this.state.signal.slice(-this.noise_symbol+1).reverse().map((simbol, ii) => {return({x: ii, y: simbol})}),
                       },
                       {
                         label: "signal_w_noise",
@@ -144,7 +154,7 @@ class App extends React.Component {
                         borderDash: [],
                         borderDashOffset: 0.0,
                         pointRadius: 3,//4,
-                        data: this.state.signal.slice(this.state.filter.length, -this.noise_symbol).reverse().map((simbol, ii) => {return({x: this.noise_symbol+ii, y: simbol})}),
+                        data: this.state.signal.slice(this.state.filter.length, -this.noise_symbol+1).reverse().map((simbol, ii) => {return({x: this.noise_symbol+ii-1, y: simbol})}),
                       },
                       {
                         label: "signal_for filter",
@@ -291,6 +301,26 @@ class App extends React.Component {
                   }}
                 />
               </CardBody>
+              <CardFooter>
+                <Row>
+                  <Col md="6">
+                    <FormLabel component="legend">
+                      SNR (dB)
+                    </FormLabel>
+                    <Slider
+                      value={snr}
+                      onChange={this.handle_SNR}
+                      aria-labelledby="continuous-slider"
+                      valueLabelDisplay="auto"
+                      getAriaValueText={valueLabelFormat}
+                      valueLabelFormat={valueLabelFormat}
+                      min={-10}
+                      max={20}
+                      step={0.01}
+                    />
+                  </Col>
+                </Row>
+              </CardFooter>
             </Card>
           </Col>
         </Row>
