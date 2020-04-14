@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "240d2a93dbdd23d306056c549187fb63",
+    "revision": "584fa0ebc2070d77ddfceadf589a465c",
     "url": "/bpsk-awgn-lab/index.html"
   },
   {
