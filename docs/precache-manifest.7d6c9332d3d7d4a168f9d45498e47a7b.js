@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "584fa0ebc2070d77ddfceadf589a465c",
+    "revision": "1c3a35b2c72c2f5c8a61db75ca0f7139",
     "url": "/bpsk-awgn-lab/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/bpsk-awgn-lab/static/css/2.0036c199.chunk.css"
   },
   {
-    "revision": "7e297c1658b979f1fc53",
+    "revision": "a5ee2a7767c86e1fe836",
     "url": "/bpsk-awgn-lab/static/css/main.71431207.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/bpsk-awgn-lab/static/js/2.da070c0a.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "7e297c1658b979f1fc53",
-    "url": "/bpsk-awgn-lab/static/js/main.1a6fa0cf.chunk.js"
+    "revision": "a5ee2a7767c86e1fe836",
+    "url": "/bpsk-awgn-lab/static/js/main.59946b37.chunk.js"
   },
   {
     "revision": "e00dc6bc53d962f81d8b",
