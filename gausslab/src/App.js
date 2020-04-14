@@ -135,9 +135,9 @@ class App extends React.Component {
   render() {
     var bits2show = []
     if(this.buffered_bits < 18){
-      bits2show = this.state.true_bits.map(bit => (bit ? '1' : '0'))
+      bits2show = this.state.bits.map(bit => (bit ? '1' : '0'))
     } else {
-      bits2show = [...this.state.true_bits.slice(0, 4).map(bit => (bit ? '1' : '0')), '...', ...this.state.true_bits.slice(-4).map(bit => (bit ? '1' : '0'))]
+      bits2show = [...this.state.bits.slice(0, 4).map(bit => (bit ? '1' : '0')), '...', ...this.state.bits.slice(-4).map(bit => (bit ? '1' : '0'))]
     }
     return (
       <div className="App">
