@@ -65,7 +65,7 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      bits: new Array(12).fill(false),
+      bits: new Array(18).fill(false),
       signal: new Array(180).fill(0.0),
       signal_filtered: new Array(60).fill(0.0),
       pulse: new Array(10).fill(1),
@@ -74,10 +74,11 @@ class App extends React.Component {
       true_bits: new Array(20).fill(false),
       decoded_bits: new Array(20).fill(false),
     }
+    this.buffered_bits = 19;
     this.noise_symbol = 90;
     this.noise_std = 0.5;
     this.snr = 20*log10(1/this.noise_std)
-    this.handicap = (this.state.filter.length-(180%this.state.filter.length))%this.state.filter.length
+    this.handicap = 0
   }
   add2signals = (value) => {
     var signal = this.state.signal
@@ -94,11 +95,16 @@ class App extends React.Component {
   add2bits = (value) => {
     var bits = this.state.bits
     var true_bits = this.state.true_bits
+    var decoded_bits = this.state.decoded_bits
     bits.push(value)
     true_bits.push(bits[0])
-    bits.shift()
+    while (bits.length > this.buffered_bits) {
+      bits.shift()
+    }
     true_bits.shift()
-    this.setState({bits: bits})
+    decoded_bits.push(this.state.signal_filtered[this.state.signal_filtered.length-(this.state.count+2+this.handicap)] > 0)
+    decoded_bits.shift()
+    this.setState({bits: bits, true_bits: true_bits, decoded_bits: decoded_bits})
   }
   update = () => {
     this.add2signals(last(this.state.bits)*this.state.pulse[this.state.count])
@@ -114,9 +120,9 @@ class App extends React.Component {
     this.snr = 20*log10(1/this.noise_std)
   }
   handle_SXB = (event, value) => {
-    console.log(value);
     this.setState({pulse: new Array(value).fill(1), filter: new Array(value).fill(1/value)})
     this.handicap = (value-(180%value))%value
+    this.buffered_bits = 1+(180+this.handicap)/value
   }
   componentDidMount() {
     this.interval = setInterval(() => this.update(), 50);
@@ -125,6 +131,12 @@ class App extends React.Component {
     clearInterval(this.interval);
   }
   render() {
+    var bits2show = []
+    if(this.buffered_bits < 18){
+      bits2show = this.state.true_bits.map(bit => (bit ? '1' : '0'))
+    } else {
+      bits2show = [...this.state.true_bits.slice(0, 4).map(bit => (bit ? '1' : '0')), '...', ...this.state.true_bits.slice(-4).map(bit => (bit ? '1' : '0'))]
+    }
     return (
       <div className="App">
         <Row>
@@ -327,7 +339,16 @@ class App extends React.Component {
                   }}
                 />
               </CardBody>
-              <CardFooter>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>
+                  <h4>
+                    Controls
+                  </h4>
+                </CardTitle>
+              </CardHeader>
+              <CardBody>
                 <Row>
                   <Col md="6">
                     <FormLabel component="legend">
@@ -347,7 +368,7 @@ class App extends React.Component {
                   </Col>
                   <Col md="6">
                     <FormLabel component="legend">
-                      Symbols per bit
+                      Samples per bit
                     </FormLabel>
                     <Slider
                       value={this.state.pulse.length}
@@ -362,7 +383,7 @@ class App extends React.Component {
                     />
                   </Col>
                 </Row>
-              </CardFooter>
+              </CardBody>
             </Card>
           </Col>
         </Row>
@@ -373,7 +394,51 @@ class App extends React.Component {
             <Card>
               <CardBody>
                 <Table>
-
+                  <tbody>
+                    <tr>
+                      {bits2show.slice().reverse().map(bit => {return(
+                        <td>
+                          {bit}
+                        </td>
+                      )})}
+                      {this.state.true_bits.slice().reverse().map(bit => {return(
+                        <td>
+                          {bit ? '1' : '0'}
+                        </td>
+                      )})}
+                      <td>
+                        True bits
+                      </td>
+                    </tr>
+                    <tr>
+                      {bits2show.slice().reverse().map(bit => {return(
+                        <td>
+                        </td>
+                      )})}
+                      {this.state.decoded_bits.slice().reverse().map(bit => {return(
+                        <td>
+                          {bit ? '1' : '0'}
+                        </td>
+                      )})}
+                      <td>
+                        Decoded bits
+                      </td>
+                    </tr>
+                    <tr>
+                      {bits2show.slice().reverse().map(bit => {return(
+                        <td>
+                        </td>
+                      )})}
+                      {this.state.decoded_bits.slice().reverse().map((bit, ii) => {return(
+                        <td>
+                          {bit != this.state.true_bits[this.state.true_bits.length-(ii+1)] ? '1' : '0'}
+                        </td>
+                      )})}
+                      <td>
+                        Bit errors
+                      </td>
+                    </tr>
+                  </tbody>
                 </Table>
               </CardBody>
             </Card>
