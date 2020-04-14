@@ -530,6 +530,30 @@ class App extends React.Component {
                     </p>
                   </Col>
                 </Row>
+                <h2>The table</h2>
+                <p align="left">
+                  The table compares the transmitted bits against the decoded ones.
+                  Note there's a delay between the transmitted bits and the decoded ones, this is due to representation purposes we have considered the time the signal takes to travel from the transmitter to the receiver.
+                  In practice, for coding/decoding purposes we can consider that the receiver receives the signal being transmitted instantly.
+                </p>
+                <p align="left">
+                  The first row containts the true value of the transmitted bits.
+                  The second row contains the bit as decoded by the receiver.
+                  The last row indicates if there's a bit error, this is a missmatch between the first and second row.
+                </p>
+                <h2>Take-aways</h2>
+                <p align="left">
+                  It's interesting to see how by increasing the signal to noise ratio, the bit decoding error decrease, same as for the samples per bit.
+                  Another thing to note is that a shorter number of sampled per bit allows us to communicate a higher amount of bits at the cost of higher error.
+                  This translates as a trade-off between bits transmitted per second and signal to noise ratio.
+                  As the signal to noise increases, the bit error probabilty decreses allowing us to decrease the number of samples per bit thus increasing the bits per second while mantaining the bit error probability stable.
+                </p>
+                <p align="left">
+                  Try to increase the signal to noise ratio and decrease the number of samples per bit to balance into a nice bit error probabilty, you will see how the number of bits per second increases.
+                </p>
+                <p align="left">
+                  Note: due to the time delay between the transmitted signal and the received one it takes a while until the changes to the parameters take effect.
+                </p>
               </CardBody>
             </Card>
           </Col>
