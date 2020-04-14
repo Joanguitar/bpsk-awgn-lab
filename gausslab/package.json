@@ -1,5 +1,6 @@
 {
   "name": "gausslab",
+  "homepage": "https://joanguitar.github.io/bpsk-awgn-lab",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
